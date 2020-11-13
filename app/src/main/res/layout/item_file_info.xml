@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?listPreferredItemHeightLarge">
+
+    <TextView
+        android:id="@+id/txt_file_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="File name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:layout_gravity="center_vertical"/>
+
+</com.google.android.material.card.MaterialCardView>
