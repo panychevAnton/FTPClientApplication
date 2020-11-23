@@ -9,28 +9,23 @@ import org.apache.commons.net.ftp.FTPFile
 import java.io.IOException
 import javax.inject.Inject
 
+
 class FtpDataSource @Inject constructor(
-        private val ftpClient: FTPClient
+        private val ftpConnection: FtpConnection
 ) {
     private val _uploadedFileList = MutableLiveData<List<FTPFile>>()
     val uploadedFileList: LiveData<List<FTPFile>>
         get() = _uploadedFileList
 
-    suspend fun fetchFileList() = CoroutineScope(Dispatchers.IO).launch {
+    suspend fun fetchFileList(){
         try {
-            val fetchedFileList = ftpClient
-                    .getFileListAsync()
-                    .await()
+            val fetchedFileList = with(ftpConnection) {
+                getFileListAsync(ftpClient)
+                        .await()
+            }
             _uploadedFileList.postValue(fetchedFileList)
         }catch (e: IOException){
             Log.e("FileUpload", "Cannot upload files", e)
         }
     }
-    private suspend fun FTPClient.getFileListAsync() = coroutineScope{
-        return@coroutineScope async {
-            listFiles().toList()
-        }
-    }
-
-
 }

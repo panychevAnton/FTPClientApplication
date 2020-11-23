@@ -15,11 +15,11 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideFtpClient(): FTPClient = FtpConnection.invoke()
+    fun provideFtpConnection(): FtpConnection = FtpConnection()
 
     @Provides
     @Singleton
-    fun provideFtpDataSource(client: FTPClient): FtpDataSource = FtpDataSource(client)
+    fun provideFtpDataSource(connect: FtpConnection): FtpDataSource = FtpDataSource(connect)
 
     @Provides
     @Singleton
