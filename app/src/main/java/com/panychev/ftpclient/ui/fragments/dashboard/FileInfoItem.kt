@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.item_file_info.*
 import org.apache.commons.net.ftp.FTPFile
 
 class FileInfoItem(
-    val file: FTPFile
+        private val file: FTPFile
 ): Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.apply {

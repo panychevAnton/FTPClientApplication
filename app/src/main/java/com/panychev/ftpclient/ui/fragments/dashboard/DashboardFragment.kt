@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.panychev.ftpclient.R
+import com.panychev.ftpclient.utils.Resource.Status.*
 import com.panychev.ftpclient.utils.ScopedFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -39,10 +41,23 @@ class DashboardFragment : ScopedFragment() {
 
     private fun bindUi() = launch {
         val filesLiveData = viewModel.fileList.await()
-        filesLiveData.observe(viewLifecycleOwner, Observer{listFiles ->
-            if (listFiles == null) return@Observer
-            group_loading.visibility = View.GONE
-            initRecyclerView(listFiles.toFileItem())
+        filesLiveData.observe(viewLifecycleOwner, Observer{
+            when(it.status){
+                LOADING -> group_loading.visibility = View.VISIBLE
+                ERROR -> {
+                    group_loading.visibility = View.GONE
+                    recycler_files.visibility = View.GONE
+                    txt_error.visibility = View.VISIBLE
+                    txt_error.text = it.message
+                }
+                SUCCESS -> {
+                    if (it.data.isNullOrEmpty()) return@Observer
+                    txt_error.visibility = View.GONE
+                    group_loading.visibility = View.GONE
+                    recycler_files.visibility = View.VISIBLE
+                    initRecyclerView(it.data.toFileItem())
+                }
+            }
         })
     }
 
